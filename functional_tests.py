@@ -7,6 +7,11 @@ class NewVisitorTest(unittest.TestCase):
   def setUp(self):
     self.browser = webdriver.Firefox()
     self.browser.implicitly_wait(3)
+
+  def check_for_expected_row_in_a_table(self, row_text):
+    table = self.browser.find_element_by_id('id_list_table')
+    rows = table.find_elements_by_tag_name('td')
+    self.assertIn(row_text, [row.text for row in rows])
   
   def tearDown(self):
     self.browser.quit()
@@ -32,11 +37,10 @@ class NewVisitorTest(unittest.TestCase):
     # When she hits enter, the page updates, and now the page lists 
     # "1: Buy peacock feathers" as an item in a to-do list 
     inputbox.send_keys(Keys.ENTER)
-    table = self.browser.find_element_by_id('id_list_table')
-    rows = table.find_elements_by_tag_name('tr')
+    
     #self.assertTrue(any(row.text == '1: Buy peacock feathers' for row in rows), 
 	#	    'New To-Do item did not appear in the table, its text was: "%s"\n'%(table.text))
-    self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
+    self.check_for_expected_row_in_a_table('1: Buy peacock feathers')
 
     # There is still a text box inviting her to add another item. She 
     # enters "Use peacock feathers to make a fly" (Edith is very methodical) 
@@ -46,9 +50,7 @@ class NewVisitorTest(unittest.TestCase):
     inputbox.send_keys(Keys.ENTER)
     
     # The page updates again, and now shows both items on her list
-    table = self.browser.find_element_by_id('id_list_table')
-    rows = table.find_elements_by_tag_name('tr')
-    self.assertIn('2: Use peacock feathers to make a fly', [row.text for row in rows])
+    self.check_for_expected_row_in_a_table('2: Use peacock feathers to make a fly')
 
     # Edith wonders whether the site will remember her list. Then she sees 
     # that the site has generated a unique URL for her -- there is some 
@@ -60,4 +62,3 @@ class NewVisitorTest(unittest.TestCase):
 
 if __name__ == '__main__':
   unittest.main()
-
