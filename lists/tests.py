@@ -56,6 +56,11 @@ class HomePageTest(TestCase):
         request.method = 'POST'
         request.POST['item_text'] = 'A new list item'
         response = home_page(request)
+
+        self.assertEqual(Item.objects.all().count(), 1)
+        new_item = Item.objects.all()[0]
+        self.assertEqual(new_item.text, 'A new list item')
+
         self.assertIn('A new list item', response.content)
         expected_html = render_to_string(
             'home.html', {'new_item_text': 'A new list item'}
@@ -88,7 +93,7 @@ class ItemModelTest(TestCase):
         saved_items = Item.objects.all()
         self.assertEqual(saved_items.count(), 2)
 
-        first_saved_item = saved_items(0)
-        second_saved_item = saved_items(1)
+        first_saved_item = saved_items[0]
+        second_saved_item = saved_items[1]
         self.assertEqual(first_saved_item.text, 'The first list item')
         self.assertEqual(second_saved_item.text, 'The second list item')
