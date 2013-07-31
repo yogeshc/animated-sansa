@@ -48,4 +48,17 @@ class HomePageTest(TestCase):
     request = HttpRequest()
     response = home_page(request)
     expected_html = render_to_string('home.html')
-    self.assertEqual(response.content, 'home.html')
+    self.assertEqual(response.content, expected_html)
+
+  def test_home_page_can_save_POST_request(self):
+    """
+    Lets adapt the view to be able to deal with a POST request. 
+    Add our POST request, then check that the returned HTML will have the new item text in it:
+    """
+    request = HttpRequest()
+    request.method = 'POST'
+    request.POST['item_text'] = 'A new list item'
+    response = home_page(request)
+    self.assertIn('A new list item', response.content)
+    expected_html = render_to_string('home.html', {'new_item_text':'A new list item'})
+    self.assertEqual(response.content, expected_html)
