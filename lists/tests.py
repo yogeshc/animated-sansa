@@ -79,6 +79,7 @@ class HomePageTest(TestCase):
         self.assertIn('listItem 1', response.content)
         self.assertIn('listItem 2', response.content)
 
+
 class ItemModelTest(TestCase):
     """
     You can see that creating a new record in the database is a relatively

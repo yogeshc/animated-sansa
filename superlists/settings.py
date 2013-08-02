@@ -13,7 +13,8 @@ DATABASES = {
     'default': {
         # For Engine add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'ENGINE': 'django.db.backends.sqlite3',
-        "NAME": 'C:/Users/Yogesh/PycharmProjects/animated-sansa/superlists/mtdatabase.db',  # Or path to database file if using sqlite3.
+        # Name of the database Or path to database file if using sqlite3.
+        "NAME": './mtdatabase.db',
         # The following settings are not used with sqlite3:
         'USER': '',
         'PASSWORD': '',
