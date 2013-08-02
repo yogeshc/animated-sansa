@@ -61,12 +61,23 @@ class HomePageTest(TestCase):
         new_item = Item.objects.all()[0]
         self.assertEqual(new_item.text, 'A new list item')
 
-        self.assertIn('A new list item', response.content)
-        expected_html = render_to_string(
-            'home.html', {'new_item_text': 'A new list item'}
-        )
-        self.assertEqual(response.content, expected_html)
+        # We no longer expect a response with a .content rendered by
+        # a template, so we lose the assertions that look at that.
+        # Instead, the response will represent an HTTP redirect, which
+        # should have status code 302, and points the browser towards
+        # a new location.
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/')
 
+    def test_home_page_displays_all_test_items(self):
+        Item.objects.create(text='listItem 1')
+        Item.objects.create(text='listItem 2')
+
+        request = HttpRequest()
+        response = home_page(request)
+
+        self.assertIn('listItem 1', response.content)
+        self.assertIn('listItem 2', response.content)
 
 class ItemModelTest(TestCase):
     """
